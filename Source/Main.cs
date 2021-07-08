@@ -39,11 +39,11 @@ namespace AutomaticNightOwl
             }
         }
 
-        [HarmonyPatch(typeof(InteractionWorker_RecruitAttempt), nameof(InteractionWorker_RecruitAttempt.DoRecruit), new Type[] { typeof(Pawn), typeof(Pawn), typeof(float), typeof(string), typeof(string), typeof(bool), typeof(bool)}, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Out, ArgumentType.Out, ArgumentType.Normal, ArgumentType.Normal })]
+        [HarmonyPatch(typeof(InteractionWorker_RecruitAttempt), nameof(InteractionWorker_RecruitAttempt.DoRecruit), new Type[] { typeof(Pawn), typeof(Pawn), typeof(string), typeof(string), typeof(bool), typeof(bool)}, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Out, ArgumentType.Out, ArgumentType.Normal, ArgumentType.Normal })]
         public static class Patch_InteractionWorker_RecruitAttempt
         {
             // Patching for recruited prisoners
-            public static void Postfix(Pawn recruiter, Pawn recruitee, float recruitChance)
+            public static void Postfix(Pawn recruiter, Pawn recruitee)
             {
                 if (recruitee is Pawn p && p.Faction?.IsPlayer == true && p.def?.race?.Humanlike == true)
                 {
