@@ -30,6 +30,7 @@ namespace AutomaticNightOwl
         [HarmonyPatch(typeof(Thing), nameof(Thing.SpawnSetup))]
         public static class Patch_Thing_SpawnSetup
         {
+            // Patching for initial pawns
             public static void Postfix(Thing __instance)
             {
                 if (__instance is Pawn p && p.Faction?.IsPlayer == true && p.def?.race?.Humanlike == true)
@@ -51,6 +52,21 @@ namespace AutomaticNightOwl
                 }  
             }
         }
+
+        [HarmonyPatch(typeof(GenGuest), nameof(GenGuest.EnslavePrisoner), new Type[] { typeof(Pawn), typeof(Pawn) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal })]
+        public static class Patch_GenGuest
+        {
+            // Patching for ensalved prisoenrs
+            public static void Postfix(Pawn warden, Pawn prisoner)
+            {
+                if (prisoner is Pawn p && p.Faction?.IsPlayer == true && p.def?.race?.Humanlike == true)
+                {
+                    AutoNightOwl(p);
+                }
+            }
+        }
+
+
         static AutomaticNightOwl()
         {
             Harmony harmony = new Harmony("AutomaticNightOwl_Ben");
