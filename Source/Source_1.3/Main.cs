@@ -40,7 +40,7 @@ namespace AutomaticNightOwl
             }
         }
 
-        [HarmonyPatch(typeof(InteractionWorker_RecruitAttempt), nameof(InteractionWorker_RecruitAttempt.DoRecruit), new Type[] { typeof(Pawn), typeof(Pawn), typeof(string), typeof(string), typeof(bool), typeof(bool)}, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Out, ArgumentType.Out, ArgumentType.Normal, ArgumentType.Normal })]
+        [HarmonyPatch(typeof(InteractionWorker_RecruitAttempt), nameof(InteractionWorker_RecruitAttempt.DoRecruit), new Type[] { typeof(Pawn), typeof(Pawn), typeof(string), typeof(string), typeof(bool), typeof(bool) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Out, ArgumentType.Out, ArgumentType.Normal, ArgumentType.Normal })]
         public static class Patch_InteractionWorker_RecruitAttempt
         {
             // Patching for recruited prisoners
@@ -49,23 +49,22 @@ namespace AutomaticNightOwl
                 if (recruitee is Pawn p && p.Faction?.IsPlayer == true && p.def?.race?.Humanlike == true)
                 {
                     AutoNightOwl(p);
-                }  
-            }
-        }
-
-        [HarmonyPatch(typeof(GenGuest), nameof(GenGuest.EnslavePrisoner), new Type[] { typeof(Pawn), typeof(Pawn) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal })]
-        public static class Patch_GenGuest
-        {
-            // Patching for ensalved prisoenrs
-            public static void Postfix(Pawn warden, Pawn prisoner)
-            {
-                if (prisoner is Pawn p && p.Faction?.IsPlayer == true && p.def?.race?.Humanlike == true)
-                {
-                    AutoNightOwl(p);
                 }
             }
         }
 
+        [HarmonyPatch(typeof(InteractionWorker_EnslaveAttempt), nameof(InteractionWorker_EnslaveAttempt.Interacted))]
+         public static class Patch_InteractionWorker_EnslaveAttempt
+         { 
+             // Patching for enslaved prisoners
+             public static void Postfix(Pawn initiator, Pawn recipient)
+             {
+                 if (recipient is Pawn p && p.GuestStatus == GuestStatus.Slave)
+                 {
+                     AutoNightOwl(p);
+                 }
+             }
+         }
 
         static AutomaticNightOwl()
         {
