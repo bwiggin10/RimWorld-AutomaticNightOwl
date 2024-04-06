@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-	<Additions>Additions - Dirtmoles and Vampires</Additions>
-	<AdditionsSetting>Enable/Disable the Automatic NightOwl Schedule for additional pawn types</AdditionsSetting>
+	<SettingsHeader>Enable/Disable the Automatic NightOwl Schedule for Additional Pawn Types:</SettingsHeader>
+	<AddOn_Ideology>Darkness Preference Ideologies</AddOn_Ideology>
+	<AddOn_Biotech>Dirtmoles / Vampires</AddOn_Biotech>
 </LanguageData>

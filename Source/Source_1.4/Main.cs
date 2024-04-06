@@ -3,11 +3,8 @@ using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Verse;
 using UnityEngine;
-using System.Linq;
-
 
 namespace AutomaticNightOwl
 {
@@ -28,7 +25,6 @@ namespace AutomaticNightOwl
         {
             settings.DoWindowContents(canvas);
         }
-
     }
 
     [StaticConstructorOnStartup]
@@ -51,29 +47,35 @@ namespace AutomaticNightOwl
                 WorldComp.PawnsWithNightOwl.Add(pawn);
             }
 
-            if (AutomaticNightOwl_Mod.settings.Additions == true)
+            if (ModsConfig.IdeologyActive)
             {
-                // Additions - Dirtmoles
-                if (ModsConfig.BiotechActive)
+                // AddOn - Ideology
+                if (AutomaticNightOwl_Mod.settings.AddOn_Ideology == true)
                 {
-                    if (pawn?.genes?.Xenotype == XenotypeDefOf.Dirtmole &&
-                            pawn.timetable != null &&
-                            !WorldComp.PawnsWithNightOwl.Contains(pawn))
+                    if (pawn.ideo.Ideo.IdeoPrefersDarkness() == true)
                     {
-                        pawn.timetable.times = new List<TimeAssignmentDef>(GenDate.HoursPerDay);
-                        for (int i = 0; i < GenDate.HoursPerDay; i++)
+                        if (pawn.timetable != null &&
+                            !WorldComp.PawnsWithNightOwl.Contains(pawn))
                         {
-                            TimeAssignmentDef setNightOwlHours = i >= 11 && i <= 18 ? TimeAssignmentDefOf.Sleep : TimeAssignmentDefOf.Anything;
-                            pawn.timetable.times.Add(setNightOwlHours);
+                            pawn.timetable.times = new List<TimeAssignmentDef>(GenDate.HoursPerDay);
+                            for (int i = 0; i < GenDate.HoursPerDay; i++)
+                            {
+                                TimeAssignmentDef setNightOwlHours = i >= 11 && i <= 18 ? TimeAssignmentDefOf.Sleep : TimeAssignmentDefOf.Anything;
+                                pawn.timetable.times.Add(setNightOwlHours);
+                            }
+                            WorldComp.PawnsWithNightOwl.Add(pawn);
                         }
-                        WorldComp.PawnsWithNightOwl.Add(pawn);
                     }
                 }
+            }
 
-                // Additions - Vampires
-                if (pawn.health.hediffSet.HasHediff(HediffDefOf.Vampirism))
+            if (ModsConfig.BiotechActive)
+            {
+                // AddOn - Dirtmoles and Sanguophages (Vampires)
+                if (AutomaticNightOwl_Mod.settings.AddOn_Biotech == true)
                 {
-                    if (pawn.timetable != null &&
+                    if (pawn?.genes?.EnjoysSunlight == false &&
+                            pawn.timetable != null &&
                             !WorldComp.PawnsWithNightOwl.Contains(pawn))
                     {
                         pawn.timetable.times = new List<TimeAssignmentDef>(GenDate.HoursPerDay);
@@ -133,7 +135,7 @@ namespace AutomaticNightOwl
         {
             public static TraitDef NightOwl;
         }
-        // Additions
+        // Add-Ons
         public static class MemeDefOf
         {
             public static MemeDef Tunneler;
@@ -142,11 +144,6 @@ namespace AutomaticNightOwl
         public static class XenotypeDefOf
         {
             public static XenotypeDef Dirtmole;
-        }
-
-        public static class HediffDefOf
-        {
-            public static HediffDef Vampirism;
         }
 
     }

@@ -5,7 +5,8 @@ namespace AutomaticNightOwl
 {
     public class AutomaticNightOwl_ModSettings : ModSettings
     {
-        public bool Additions = false;
+        public bool AddOn_Ideology;
+        public bool AddOn_Biotech;
 
         public void DoWindowContents(Rect canvas)
         {
@@ -14,14 +15,20 @@ namespace AutomaticNightOwl
                 ColumnWidth = 500f
             };
             ls.Begin(canvas);
-            string text_cn = Translator.Translate("Additions");
-            ls.CheckboxLabeled(text_cn, ref Additions, Translator.Translate("AdditionsSetting"));
+            string settingsHeader = Translator.Translate("SettingsHeader");
+            string addonIdeology = Translator.Translate("AddOn_Ideology");
+            string addonBiotech = Translator.Translate("AddOn_Biotech");
+
+            ls.Label(settingsHeader, -1);
+            ls.CheckboxLabeled(addonIdeology, ref AddOn_Ideology);
+            ls.CheckboxLabeled(addonBiotech, ref AddOn_Biotech);
             ls.End();
         }
 
         public override void ExposeData()
         {
-            Scribe_Values.Look(ref Additions, "Additions", false, false);
+            Scribe_Values.Look(ref AddOn_Ideology, "AddOn_Ideology", true, false);
+            Scribe_Values.Look(ref AddOn_Biotech, "AddOn_Biotech", true, false);
         }
     }
 }
