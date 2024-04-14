@@ -52,18 +52,21 @@ namespace AutomaticNightOwl
                 // AddOn - Ideology
                 if (AutomaticNightOwl_Mod.settings.AddOn_Ideology == true)
                 {
-                    if (pawn.ideo.Ideo.IdeoPrefersDarkness() == true)
+                    if (pawn.ideo.Ideo != null)
                     {
-                        if (pawn.timetable != null &&
-                            !WorldComp.PawnsWithNightOwl.Contains(pawn))
+                        if (pawn.ideo.Ideo.IdeoPrefersDarkness() == true)
                         {
-                            pawn.timetable.times = new List<TimeAssignmentDef>(GenDate.HoursPerDay);
-                            for (int i = 0; i < GenDate.HoursPerDay; i++)
+                            if (pawn.timetable != null &&
+                                !WorldComp.PawnsWithNightOwl.Contains(pawn))
                             {
-                                TimeAssignmentDef setNightOwlHours = i >= 11 && i <= 18 ? TimeAssignmentDefOf.Sleep : TimeAssignmentDefOf.Anything;
-                                pawn.timetable.times.Add(setNightOwlHours);
+                                pawn.timetable.times = new List<TimeAssignmentDef>(GenDate.HoursPerDay);
+                                for (int i = 0; i < GenDate.HoursPerDay; i++)
+                                {
+                                    TimeAssignmentDef setNightOwlHours = i >= 11 && i <= 18 ? TimeAssignmentDefOf.Sleep : TimeAssignmentDefOf.Anything;
+                                    pawn.timetable.times.Add(setNightOwlHours);
+                                }
+                                WorldComp.PawnsWithNightOwl.Add(pawn);
                             }
-                            WorldComp.PawnsWithNightOwl.Add(pawn);
                         }
                     }
                 }
